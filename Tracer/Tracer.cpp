@@ -6,7 +6,22 @@
 
 int main()
 {
-    std::cout << "Hello World!\n"; 
+	int nx, ny;
+
+	std::cout << "P3\n" << nx << " " << ny << "\n255\n";
+	for (int j = ny - 1; j >= 0; j--)
+	{
+		for (int i = 0; i < nx; i++) 
+		{
+			float r = float(i) / float(nx); // 0 - 1
+			float g = float(j) / float(ny); // 1 - 0
+			float b = 0.2;
+			int ir = int(255.99 * r);
+			int ig = int(255.99 * g);
+			int ib = int(255.99 * b);
+			std::cout << ir << "-" << "-" << ig << "-" << ib << "\n";
+		}
+	}
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
