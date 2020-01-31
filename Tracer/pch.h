@@ -10,5 +10,7 @@
 #define PCH_H
 
 // TODO: add headers that you want to pre-compile here
+#define STB_IMAGE_IMPLEMENTATION
+//#include "Lib/stb_image.h"
 
 #endif //PCH_H
