@@ -3,6 +3,8 @@
 
 #include "math/ray.h"
 
+//#include "materials/material.h"
+
 class material;
 
 struct hit_record

@@ -48,6 +48,12 @@
     <ClInclude Include="materials\material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="materials\lambertian.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="materials\metal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
