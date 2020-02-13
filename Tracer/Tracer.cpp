@@ -13,6 +13,7 @@
 #include "math/random.h"
 #include "materials/lambertian.h"
 #include "materials/metal.h"
+#include "materials/dialetric.h"
 
 vec3 color(const ray &r, hittable *world, int depth) 
 {
@@ -21,7 +22,7 @@ vec3 color(const ray &r, hittable *world, int depth)
 		//return 0.5*vec3(rec.normal.x() + 1, rec.normal.y() + 1, rec.normal.z() + 1);
 		ray scattered;
 		vec3 attenuation;
-		if (depth < 50 && rec.mat_ptr->scatter(r, rec, attenuation, scattered)) {
+		if (depth < 25 && rec.mat_ptr->scatter(r, rec, attenuation, scattered)) {
 			return attenuation * color(scattered, world, depth + 1);
 		}
 		else {
@@ -43,7 +44,7 @@ int main()
 	int n=1;
 	int nx = 200*n;
 	int ny = 100*n;
-	int ns = 100;
+	int ns = 200;
 	/*
 		(-2,1,-1)---------------(2,1,-1)
 		l								l
@@ -62,8 +63,8 @@ int main()
 	hittable *list[4];
 	list[0] = new sphere(vec3(0,0,-1),0.5, new lambertian(vec3(1.0,0.0,0.0)));
 	list[1] = new sphere(vec3(0,-100.5,-1),100, new lambertian(vec3(0.8,0.8,0.0)));
-	list[2] = new sphere(vec3(1,0,-1), 0.5 , new metal(vec3(0.8,0.6,0.2)));
-	list[3] = new sphere(vec3(-1,0,-1), 0.5 , new metal(vec3(0.8, 0.8, 0.8)));
+	list[2] = new sphere(vec3(1,0,-1), 0.5 , new metal(vec3(0.8,0.6,0.2),0.0));
+	list[3] = new sphere(vec3(-1,0,-1), 0.5 , new dieletric(1.5));
 	hittable *world = new hittable_list(list,4);
 	camera cam;
 	for (int j = ny - 1; j >= 0; j--)

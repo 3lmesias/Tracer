@@ -23,4 +23,10 @@ vec3 random_in_unit_sphere()
 	return p;
 }
 
+vec3 random_in_sphere(float r)
+{
+	vec3 p = random_in_unit_sphere();
+	return p * r;
+}
+
 #endif // !RANDOMH
