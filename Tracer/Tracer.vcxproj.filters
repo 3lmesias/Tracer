@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\hittables">
+      <UniqueIdentifier>{0645bb4a-483b-421d-80f8-b7418f506dac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\materials">
+      <UniqueIdentifier>{ac9bb7bb-e547-42d7-bdef-86e7ecf21150}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -30,29 +36,35 @@
     <ClInclude Include="smath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="hittable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="objects\sphere.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="objects\hittable_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="math\random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="materials\material.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="hittable.h">
+      <Filter>Header Files\hittables</Filter>
     </ClInclude>
-    <ClInclude Include="materials\lambertian.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="objects\hittable_list.h">
+      <Filter>Header Files\hittables</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\sphere.h">
+      <Filter>Header Files\hittables</Filter>
+    </ClInclude>
+    <ClInclude Include="materials\material.h">
+      <Filter>Header Files\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="materials\dialetric.h">
+      <Filter>Header Files\materials</Filter>
     </ClInclude>
     <ClInclude Include="materials\metal.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="materials\lambertian.h">
+      <Filter>Header Files\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\moving_sphere.h">
+      <Filter>Header Files\hittables</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

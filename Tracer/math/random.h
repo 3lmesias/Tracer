@@ -23,4 +23,20 @@ vec3 random_in_unit_sphere()
 	return p;
 }
 
+vec3 random_in_sphere(float r)
+{
+	vec3 p = random_in_unit_sphere();
+	return p * r;
+}
+
+vec3 random_in_unit_disk()
+{
+	vec3 p;
+	do
+	{
+		p = 2.0 * vec3(random_double(), random_double(), 0) - vec3(1, 1, 0);
+	} while (dot(p, p) >= 1);
+	return p;
+}
+
 #endif // !RANDOMH
