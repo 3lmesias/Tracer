@@ -22,7 +22,7 @@ vec3 color(const ray &r, hittable *world, int depth)
 		//return 0.5*vec3(rec.normal.x() + 1, rec.normal.y() + 1, rec.normal.z() + 1);
 		ray scattered;
 		vec3 attenuation;
-		if (depth < 25 && rec.mat_ptr->scatter(r, rec, attenuation, scattered)) {
+		if (depth < 50 && rec.mat_ptr->scatter(r, rec, attenuation, scattered)) {
 			return attenuation * color(scattered, world, depth + 1);
 		}
 		else {
@@ -44,7 +44,7 @@ int main()
 	int n=1;
 	int nx = 200*n;
 	int ny = 100*n;
-	int ns = 200;
+	int ns = 500;
 	/*
 		(-2,1,-1)---------------(2,1,-1)
 		l								l
@@ -59,14 +59,30 @@ int main()
 	
 	*/
 	imgfile<< "P3\n" << nx << " " << ny << "\n255\n";
-
-	hittable *list[4];
+	
+	hittable *list[5];
 	list[0] = new sphere(vec3(0,0,-1),0.5, new lambertian(vec3(1.0,0.0,0.0)));
 	list[1] = new sphere(vec3(0,-100.5,-1),100, new lambertian(vec3(0.8,0.8,0.0)));
 	list[2] = new sphere(vec3(1,0,-1), 0.5 , new metal(vec3(0.8,0.6,0.2),0.0));
 	list[3] = new sphere(vec3(-1,0,-1), 0.5 , new dieletric(1.5));
-	hittable *world = new hittable_list(list,4);
-	camera cam;
+	list[4] = new sphere(vec3(-1, 0, -1), -0.45, new dieletric(1.5));
+	hittable *world = new hittable_list(list,5);
+	
+	/*
+	hittable *list[2];
+	float R = cos(M_PI / 4);
+	list[0] = new sphere(vec3(-R, 0, -1), R, new lambertian(vec3(0, 0, 1)));
+	list[1] = new sphere(vec3(R, 0, -1), R, new lambertian(vec3(1, 0, 0)));
+	hittable *world = new hittable_list(list, 2);
+	*/
+
+	vec3 lookfrom(3, 3, 2);
+	vec3 lookat(0, 0, -1);
+	float dist_to_focus = (lookfrom - lookat).length();
+	float aperture = 0.1;
+
+	//camera cam(lookfrom,lookat,vec3(0,1,0),20, float(nx) / float(ny));
+	camera cam(lookfrom, lookat, vec3(0, 1, 0), 20, float(nx) / float(ny),aperture,dist_to_focus);
 	for (int j = ny - 1; j >= 0; j--)
 	{
 		for (int i = 0; i < nx; i++) 

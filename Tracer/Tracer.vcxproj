@@ -162,6 +162,7 @@
     <ClInclude Include="math\ray.h" />
     <ClInclude Include="math\vec3.h" />
     <ClInclude Include="objects\hittable_list.h" />
+    <ClInclude Include="objects\moving_sphere.h" />
     <ClInclude Include="objects\sphere.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="smath.h" />
