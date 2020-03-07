@@ -161,6 +161,7 @@
     <ClInclude Include="math\random.h" />
     <ClInclude Include="math\ray.h" />
     <ClInclude Include="math\vec3.h" />
+    <ClInclude Include="objects\aabb.h" />
     <ClInclude Include="objects\hittable_list.h" />
     <ClInclude Include="objects\moving_sphere.h" />
     <ClInclude Include="objects\sphere.h" />

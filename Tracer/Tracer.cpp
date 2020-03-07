@@ -80,9 +80,11 @@ int main()
 	vec3 lookat(0, 0, -1);
 	float dist_to_focus = (lookfrom - lookat).length();
 	float aperture = 0.1;
+	float t0 = 0;
+	float t1 = 0;
 
 	//camera cam(lookfrom,lookat,vec3(0,1,0),20, float(nx) / float(ny));
-	camera cam(lookfrom, lookat, vec3(0, 1, 0), 20, float(nx) / float(ny),aperture,dist_to_focus);
+	camera cam(lookfrom, lookat, vec3(0, 1, 0), 20, float(nx) / float(ny),aperture,dist_to_focus,t0,t1);
 	for (int j = ny - 1; j >= 0; j--)
 	{
 		for (int i = 0; i < nx; i++) 
