@@ -58,4 +58,12 @@ bool moving_sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec)
 	return false;
 }
 
+bool moving_sphere::bounding_box(float t0, float t1, aabb &box) const
+{
+	aabb box0(center(t0) - vec3(radius), center(t0) + vec3(radius));
+	aabb box1(center(t1) - vec3(radius), center(t1) + vec3(radius));
+	box = surronding_box(box0, box1);
+	return true;
+}
+
 #endif // !MOVING_SPHEREH

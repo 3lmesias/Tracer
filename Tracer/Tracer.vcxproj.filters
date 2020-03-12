@@ -69,6 +69,24 @@
     <ClInclude Include="objects\aabb.h">
       <Filter>Header Files\hittables</Filter>
     </ClInclude>
+    <ClInclude Include="materials\texture.h">
+      <Filter>Header Files\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="materials\constant_texture.h">
+      <Filter>Header Files\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="materials\checker_texture.h">
+      <Filter>Header Files\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="materials\diffuse_light.h">
+      <Filter>Header Files\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\xy_rect.h">
+      <Filter>Header Files\hittables</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\box.h">
+      <Filter>Header Files\hittables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

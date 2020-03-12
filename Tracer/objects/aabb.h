@@ -1,10 +1,11 @@
-#ifndef AABB
+#ifndef AABBH
 
 
-#define AABB
+#define AABBH
 
 #include "../math/vec3.h"
 #include "../math/ray.h"
+#include "../smath.h"
 
 class aabb
 {
@@ -32,10 +33,31 @@ public:
 		}
 		return true;
 	}
+
+
+
+
 	vec3 _min;
 	vec3 _max;
 };
 
 
-#endif // !AABB
+
+aabb surronding_box(aabb box0, aabb box1)
+{
+	vec3 small(ffmin(box0.min().x(),box1.min().x()),
+		ffmin(box0.min().y(), box1.min().y()),
+		ffmin(box0.min().z(), box1.min().z())
+	);
+	vec3 big(ffmax(box0.max().x(), box1.max().x()),
+		ffmax(box0.max().y(), box1.max().y()),
+		ffmax(box0.max().z(), box1.max().z())
+	);
+
+	return aabb(small, big);
+}
+
+
+
+#endif // !AABBH
 
