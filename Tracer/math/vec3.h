@@ -23,9 +23,9 @@ public:
 		e[1] = en;
 		e[2] = en;
 	}
-	inline float x() { return e[0]; }
-	inline float y() { return e[1]; }
-	inline float z() { return e[2]; }
+	inline float x() const { return e[0]; }
+	inline float y() const { return e[1]; }
+	inline float z() const { return e[2]; }
 
 	inline float r() { return e[0]; }
 	inline float g() { return e[1]; }

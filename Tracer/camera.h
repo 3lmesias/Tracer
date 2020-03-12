@@ -13,6 +13,9 @@ public:
 	camera(vec3 lookfrom, vec3 lookat, vec3 vup, float vfov, float aspect,
 		float aperture, float focus_dist, float t0, float t1)
 	{
+		time0 = t0;
+		time1 = t1;
+
 		lens_radius = aperture / 2;
 
 		float theta = vfov * M_PI/180;
@@ -27,7 +30,8 @@ public:
 		
 
 
-		lower_left_corner = origin - half_height * v * focus_dist- half_width * u *focus_dist- (focus_dist*w);//vec3(-half_width, -half_height, -1.0);// todo change to near_lane
+		lower_left_corner = origin - half_height * v * focus_dist- half_width * u
+			*focus_dist- (focus_dist*w);//vec3(-half_width, -half_height, -1.0);// todo change to near_lane
 		horizontal = 2 * half_width*u*focus_dist;
 		vertical = 2 * half_height*v*focus_dist;
 	}
@@ -65,7 +69,9 @@ public:
 		}
 		vec3 rd = lens_radius * random_in_unit_disk();
 		vec3 offset = u * rd.x() + v * rd.y();
-		return ray(origin + offset, lower_left_corner + s * horizontal + t * vertical - origin - offset,time);
+		ray aux = ray(origin + offset, lower_left_corner + s * horizontal + t * vertical - origin - offset, time);
+		aux.direction().make_unit_vector();
+		return aux;
 
 	}
 
