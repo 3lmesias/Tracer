@@ -154,16 +154,23 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="hittable.h" />
     <ClInclude Include="Lib\stb_image.h" />
+    <ClInclude Include="materials\checker_texture.h" />
+    <ClInclude Include="materials\constant_texture.h" />
     <ClInclude Include="materials\dialetric.h" />
+    <ClInclude Include="materials\diffuse_light.h" />
     <ClInclude Include="materials\lambertian.h" />
     <ClInclude Include="materials\material.h" />
     <ClInclude Include="materials\metal.h" />
+    <ClInclude Include="materials\texture.h" />
     <ClInclude Include="math\random.h" />
     <ClInclude Include="math\ray.h" />
     <ClInclude Include="math\vec3.h" />
+    <ClInclude Include="objects\aabb.h" />
+    <ClInclude Include="objects\box.h" />
     <ClInclude Include="objects\hittable_list.h" />
     <ClInclude Include="objects\moving_sphere.h" />
     <ClInclude Include="objects\sphere.h" />
+    <ClInclude Include="objects\xy_rect.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="smath.h" />
   </ItemGroup>
