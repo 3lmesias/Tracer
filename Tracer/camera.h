@@ -57,7 +57,7 @@ public:
 		vertical = 2 * half_height*v;
 	}
 
-	ray get_ray(float s, float t) {
+	ray get_ray(float s, float t) const{
 
 		float time = time0 + random_double()*(time1 - time0);
 

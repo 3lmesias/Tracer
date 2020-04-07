@@ -22,7 +22,7 @@ public:
 	}
 
 	vec3 pmin, pmax;
-	hittable *faces;
+	hittable_list *faces;
 };
 
 
@@ -32,14 +32,17 @@ box::box(const vec3 &p0, const vec3 &p1, material *ptr)
 	pmax = p1;
 	hittable **list = new hittable*[6];
 	int i = 0;
-	list[i++] = new xy_rect(pmin.x(), pmax.x(), pmin.y(), pmax.y(), pmin.z(), ptr);
+	list[i++] = (
+		new xy_rect(pmin.x(), pmax.x(), pmin.y(), pmax.y(), pmin.z(), ptr));
 	list[i++] = new xy_rect(pmin.x(), pmax.x(), pmin.y(), pmax.y(), pmax.z(), ptr);
 
-	list[i++] = new yz_rect(pmin.y(), pmax.y(), pmin.z(), pmax.z(), pmin.x(), ptr);
+	list[i++] = (
+		new yz_rect(pmin.y(), pmax.y(), pmin.z(), pmax.z(), pmin.x(), ptr));
 	list[i++] = new yz_rect(pmin.y(), pmax.y(), pmin.z(), pmax.z(), pmax.x(), ptr);
 
-	list[i++] = new xz_rect(pmin.x(), pmax.x(), pmin.z(), pmax.z(), pmin.y(), ptr);
-	list[i++] = new yz_rect(pmin.y(), pmax.y(), pmin.z(), pmax.z(), pmax.x(), ptr);
+	list[i++] = (
+		new xz_rect(pmin.x(), pmax.x(), pmin.z(), pmax.z(), pmin.y(), ptr));
+	list[i++] = new xz_rect(pmin.x(), pmax.x(), pmin.z(), pmax.z(), pmax.y(), ptr);
 
 	faces = new hittable_list(list,i);
 }

@@ -169,7 +169,9 @@
     <ClInclude Include="objects\box.h" />
     <ClInclude Include="objects\hittable_list.h" />
     <ClInclude Include="objects\moving_sphere.h" />
+    <ClInclude Include="objects\Rotate.h" />
     <ClInclude Include="objects\sphere.h" />
+    <ClInclude Include="objects\translate.h" />
     <ClInclude Include="objects\xy_rect.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="smath.h" />
