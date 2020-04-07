@@ -13,8 +13,8 @@ public:
 	aabb(){}
 	aabb(const vec3 &a, const vec3 &b) { _min = a; _max = b; }
 
-	vec3 min() { return _min; }
-	vec3 max() { return _max; }
+	vec3 minp() { return _min; }
+	vec3 maxp() { return _max; }
 
 	bool hit(const ray &r, float tmin, float tmax) const
 	{
@@ -45,13 +45,13 @@ public:
 
 aabb surronding_box(aabb box0, aabb box1)
 {
-	vec3 small(ffmin(box0.min().x(),box1.min().x()),
-		ffmin(box0.min().y(), box1.min().y()),
-		ffmin(box0.min().z(), box1.min().z())
+	vec3 small(ffmin(box0.minp().x(),box1.minp().x()),
+		ffmin(box0.minp().y(), box1.minp().y()),
+		ffmin(box0.minp().z(), box1.minp().z())
 	);
-	vec3 big(ffmax(box0.max().x(), box1.max().x()),
-		ffmax(box0.max().y(), box1.max().y()),
-		ffmax(box0.max().z(), box1.max().z())
+	vec3 big(ffmax(box0.maxp().x(), box1.maxp().x()),
+		ffmax(box0.maxp().y(), box1.maxp().y()),
+		ffmax(box0.maxp().z(), box1.maxp().z())
 	);
 
 	return aabb(small, big);

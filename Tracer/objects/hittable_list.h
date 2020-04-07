@@ -18,6 +18,7 @@ public:
 
 bool hittable_list::hit(const ray &r, float t_min, float t_max, hit_record &rec) const
 {
+
 	hit_record temp_rec;
 	bool hit_anything = false;
 	double closest_so_far = t_max;
@@ -25,6 +26,9 @@ bool hittable_list::hit(const ray &r, float t_min, float t_max, hit_record &rec)
 	{
 		if (list[i]->hit(r, t_min, closest_so_far, temp_rec))
 		{
+			if (list_size == 6) {
+				int s = 3;
+			}
 			hit_anything = true;
 			closest_so_far = temp_rec.t;
 			rec = temp_rec;

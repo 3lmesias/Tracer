@@ -87,6 +87,12 @@
     <ClInclude Include="objects\box.h">
       <Filter>Header Files\hittables</Filter>
     </ClInclude>
+    <ClInclude Include="objects\translate.h">
+      <Filter>Header Files\hittables</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\Rotate.h">
+      <Filter>Header Files\hittables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

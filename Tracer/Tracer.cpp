@@ -1,11 +1,9 @@
 // Tracer.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-//#include "pch.h"
-#include <iostream>
-//#include "Lib/stb_image.h"
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "smath.h"
 #include "objects/hittable_list.h"
 #include "objects/sphere.h"
@@ -20,16 +18,31 @@
 #include "materials/diffuse_light.h"
 #include "objects/xy_rect.h"
 #include "objects/box.h"
-vec3 color(const ray &r, hittable *world, int depth) 
+#include <thread>
+#include <future>
+#include <chrono>
+#include <windows.h>
+#include <vector>
+#include "objects/translate.h"
+#include "objects/Rotate.h"
+
+using namespace std;
+
+
+
+vec3 color(const ray &r, const hittable *world, int depth) 
 {
+	if (depth <= 0) {
+		return vec3(0);
+	}
 	hit_record rec;
 	if (world->hit(r, 0.001, FLT_MAX, rec)) {
 		//return 0.5*vec3(rec.normal.x() + 1, rec.normal.y() + 1, rec.normal.z() + 1);
 		ray scattered;
 		vec3 attenuation;
 		vec3 emitted = rec.mat_ptr->emitted(rec.u, rec.v, rec.p);
-		if (depth < 50 && rec.mat_ptr->scatter(r, rec, attenuation, scattered)) {
-			return emitted + attenuation * color(scattered, world, depth + 1);
+		if (rec.mat_ptr->scatter(r, rec, attenuation, scattered)) {
+			return emitted + attenuation * color(scattered, world, depth - 1);
 		}
 		else {
 			return emitted;
@@ -41,6 +54,8 @@ vec3 color(const ray &r, hittable *world, int depth)
 	}
 }
 
+
+
 hittable *cornell_box() {
 	hittable **list = new hittable*[5];
 	int i = 0;
@@ -49,15 +64,27 @@ hittable *cornell_box() {
 	material *green = new lambertian(new constant_texture(vec3(0.12, 0.45, 0.15)));
 	material *light = new diffuse_light(new constant_texture(vec3(15, 15, 15)));
 
-	list[i++] = new flip_normals( new yz_rect(0, 555, 0, 555, 555, green));
+	list[i++] = ( new yz_rect(0, 555, 0, 555, 555, green));//
 	list[i++] = new yz_rect(0, 555, 0, 555, 0, red);
-	list[i++] = new flip_normals(new xz_rect(0, 555, 0, 555, 555, white));
+	list[i++] = (new xz_rect(0, 555, 0, 555, 555, white));//
 	list[i++] = new xz_rect(213, 343, 227, 332, 554, light);
 	list[i++] = new xz_rect(0, 555, 0, 555, 0, white);
-	list[i++] = new flip_normals(new xy_rect(0, 555, 0, 555, 555, white));
+	list[i++] = (new xy_rect(0, 555, 0, 555, 555, white));//
 
-	list[i++] = new box(vec3(130, 0, 65), vec3(295, 165, 230), white);
-	list[i++] = new box(vec3(256,0,295), vec3(430,330,460), white);
+	//list[i++] = new translate(new rotate_y( new box(vec3(0), vec3(295, 165, 230), white), -18),vec3(130,0,65));
+	//list[i++] = new translate(new rotate_y( new box(vec3(0), vec3(430,330,460), white), 15),vec3(256, 0, 295));
+	hittable *box1 = new box(vec3(0), vec3(165, 330, 165), white);
+	rotate_y *rot1 = new rotate_y(box1, 15);
+	translate *trans1 = new translate(rot1, vec3(265, 0, 295));
+	list[i++] = trans1;
+	//-18
+	hittable *box2 = new box(vec3(0), vec3(165, 165, 165), white);
+	rotate_y *rot2 = new rotate_y(box2, -18);
+	translate *trans2 = new translate(rot2, vec3(130, 0, 65));
+	list[i++] = trans2;
+
+	//list[i++] = new box(vec3(130,0,65), vec3(295, 165, 230), white);
+	//list[i++] = new box(vec3(256,0,295), vec3(430, 330, 460), white);
 
 	return new hittable_list(list, i);
 }
@@ -128,15 +155,162 @@ hittable *simple_light() {
 	return new hittable_list(list, 4);
 }
 
-int main()
+
+
+const int ns = 500;
+const int depth = 25;
+
+const int x = 9; //16
+const int y = 9; // 9
+const int n = 35;
+
+const int nx = x*n;
+const int ny = y*n;
+
+vec3 image[ny][nx];
+
+
+
+void gammacorrect_and_convertion(vec3 color, int &r, int &g, int &b)
+{
+	color = vec3(sqrt(color[0]), sqrt(color[1]), sqrt(color[2]));
+	r = int(255.99 * color.r());
+	g = int(255.99 * color.g());
+	b = int(255.99 * color.b());
+}
+
+void calculate_image_fraction(int first_row, int last_row, const camera &cam, const hittable *world) 
+{
+	for (int j = last_row-1; j >= first_row; j--) 
+	{
+		for (int i = 0; i < nx; i++) 
+		{
+			vec3 col(0);
+			for (int s = 0; s < ns; s++)
+			{
+				float u = float(i + random_double()) / float(nx);
+				float v = float(j + random_double()) / float(ny);
+
+				ray r = cam.get_ray(u, v);
+				col += color(r, world, depth);
+			}
+
+			col /= float(ns);
+			int ir, ig, ib;
+			gammacorrect_and_convertion(col, ir, ig, ib);
+			image[j][i] = vec3(ir, ig, ib);
+		}
+		
+	}
+
+
+}
+
+
+void whrite_image_file() {
+
+	std::ofstream imgfile("image.ppm");
+	imgfile << "P3\n" << nx << " " << ny << "\n255\n";
+
+	for (int j = ny - 1; j >= 0; j--)
+	{
+		for (int i = 0; i < nx; i++)
+		{
+			int r = image[j][i].r();
+			int g = image[j][i].g();
+			int b = image[j][i].b();
+			imgfile << r << " " << g << " " << b << "\n";
+		}
+
+	}
+	imgfile.close();
+}
+
+void clasic_render(camera &cam, hittable *world)
 {
 	std::ofstream imgfile("image.ppm");
-	int n=16*4;
-	int nx = 200*2;//16*n;
-	int ny = 200*2;//9*n;
-	int ns = 500;
+	imgfile << "P3\n" << nx << " " << ny << "\n255\n";
 
-	imgfile<< "P3\n" << nx << " " << ny << "\n255\n";
+
+	for (int j = ny - 1; j >= 0; j--)
+	{
+		for (int i = 0; i < nx; i++)
+		{
+			vec3 col(0);
+			for (int s = 0; s < ns; s++) {
+
+				float u = float(i + random_double()) / float(nx);
+				float v = float(j + random_double()) / float(ny);
+
+				ray r = cam.get_ray(u, v);
+				col += color(r, world, 30);
+			}
+
+			col /= float(ns);
+			int ir, ig, ib;
+			gammacorrect_and_convertion(col, ir, ig, ib);
+			imgfile << ir << " " << ig << " " << ib << "\n";
+		}
+	}
+	imgfile.close();
+}
+
+void thread_render(camera &cam, hittable *world)
+{
+	int th = std::thread::hardware_concurrency();
+	vector<std::future<void>> handlers;
+	int part_size = ny / th;
+
+	if (part_size == 0) {
+		clasic_render(cam, world);
+		return;
+	}
+
+	int begin = 0;
+	int end = begin + part_size;
+
+
+	for (int i = 0; i < th; i++)
+	{
+		// start new thread
+
+		//caso especial ultimo hilo puede procesar mas 
+		if (i == th - 1) {
+			if (end < ny) {
+				end = ny;
+			}
+		}
+
+		handlers.push_back( std::async(std::launch::async, calculate_image_fraction, begin, end,cam,world) ); 
+		//calculate_image_fraction(begin, end,cam,world);
+
+		begin += part_size;
+		end += part_size;
+	}
+
+
+	//wait for the ending of threads
+	for (int i = 0; i < handlers.size(); i++)
+	{
+		handlers[i].wait();
+	}
+
+	whrite_image_file();
+
+}
+
+
+
+int main()
+{
+	cout << "pito" << endl;
+	
+
+	ray raybuffer[10];
+	//std::future<vec3> colorbuffer[10];
+	std::vector<std::future<vec3>> colorbuffer(10);
+
+
 	/*
 	hittable *list[5];
 	list[0] = new sphere(vec3(0,0,-1),0.5, new lambertian(vec3(1.0,0.0,0.0)));
@@ -170,29 +344,12 @@ int main()
 	dir = dir * ss;
 
 	//lookfrom = lookfrom + dir;
-
+	int rc = 0;
 	//camera cam(lookfrom,lookat,vec3(0,1,0),20, float(nx) / float(ny));
 	camera cam(lookfrom, lookat, vec3(0, 1, 0), vfov, float(nx) / float(ny),aperture,dist_to_focus,t0,t1);
-	for (int j = ny - 1; j >= 0; j--)
-	{
-		for (int i = 0; i < nx; i++) 
-		{
-			vec3 col(0);
-			for (int s = 0; s < ns; s++) {
-				float u = float(i + random_double()) / float(nx);
-				float v = float(j + random_double()) / float(ny);
-				ray r = cam.get_ray(u, v);
-				col += color(r, world,0);
-			}
 
-			col /= float(ns);
-			col = vec3(sqrt(col[0]), sqrt(col[1]), sqrt(col[2])); // gama correct 
-			int ir = int(255.99 * col.r());
-			int ig = int(255.99 * col.g());
-			int ib = int(255.99 * col.b());
-			//std::cout << ir <<" "<< ig << " " << ib << "\n";
-			imgfile << ir << " " << ig << " " << ib << "\n";
-		}
-	}
-	imgfile.close();
+	//clasic_render(cam, world);
+	thread_render(cam,world);
+
+	
 }
